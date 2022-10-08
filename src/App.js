@@ -1,15 +1,18 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Footer from './components/Footer';
-import HeroIndex from './components/HeroIndex';
+import ItemListContainer from './components/ItemListContainer';
 import Navbar from './components/Navbar';
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <HeroIndex />
-      <Footer />
-    </div>
+  <BrowserRouter>
+    <Navbar />
+    <Routes>
+      <Route path="/" element={<ItemListContainer />} />
+    </Routes>
+    <Footer />
+  </BrowserRouter>
   );
 }
 
