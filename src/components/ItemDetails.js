@@ -30,7 +30,7 @@ const ItemDetails = () => {
         <h1 className='text-3xl font-bold drop-shadow-sm'>{product.title}</h1>
         <div className='flex flex-row gap-4 items-center'>
           <div className='text-2xl'>{formatedPrice}</div>
-          <div className='badge badge-accent capitalize'>{product.category}</div>
+          <div className='badge badge-outline capitalize'>{product.category}</div>
         </div>
         <div className='text-lg'>{product.description}</div>
         <button className='btn btn-primary shadow-md'>Agregar al carrito</button>

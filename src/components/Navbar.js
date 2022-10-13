@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 const Navbar = () => {
   return (
-    <div className="navbar bg-primary auto top-0 z-50">
+    <div className="navbar bg-primary auto top-0">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -35,7 +35,7 @@ const Navbar = () => {
               Productos
               <svg className="fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
             </a>
-            <ul className="rounded-box bg-base-100 p-2 mt-3 shadow-md">
+            <ul className="rounded-box bg-base-100 p-2 mt-3 shadow-md z-50">
               <li><Link to={'/'}>Todos</Link></li>
               <li><Link to={'/category/0'}>Electronics</Link></li>
               <li><Link to={'/category/1'}>Jewelery</Link></li>
