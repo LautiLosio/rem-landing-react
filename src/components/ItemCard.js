@@ -9,15 +9,6 @@ export const ItemCard = ( { id, title, price, description, image, category} ) =>
 
   return (
     <Link to={`/item/${id}`} className="card w-80 bg-base-100 shadow-lg max-h-min">
-      {/* <div >
-        <figure className="px-10 pt-10 h-50"><img className='max-h-40' src={image} alt={title} /></figure>
-        <div className="card-body">
-          <h2 className="font-bold text-lg text-center">{title}</h2>
-          <div className="card-actions justify-center ">
-            <div className='badge badge-secondary font-semibold text-lg p-4'>{formatedPrice}</div>
-          </div>
-        </div>
-      </div> */}
       <div className="card bg-base-100 shadow-xl">
         <figure><img src={image} alt={title} className="p-4 px-8 h-52" /></figure>
         <div className="card-body">
