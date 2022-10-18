@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
+import { useCart } from '../context/cartContext';
 
 const ItemDetails = () => {
+
+  const { add, cart } = useCart();
 
   const { itemId } = useParams();
 
@@ -20,6 +23,10 @@ const ItemDetails = () => {
     setFormatedPrice(formatedPrice);
   }
 
+  const addToCart = () => {
+    add(product)
+  }
+
 
   return (
     <div className='flex flex-col items-center md:items-start p-12 md:flex-row md:p-24 gap-8'>
@@ -33,7 +40,7 @@ const ItemDetails = () => {
           <div className='badge badge-outline capitalize'>{product.category}</div>
         </div>
         <div className='text-lg'>{product.description}</div>
-        <button className='btn btn-primary shadow-md'>Agregar al carrito</button>
+        <button className='btn btn-primary shadow-md' onClick={addToCart}>Agregar al carrito</button>
       </div>
     </div>
   )
