@@ -1,38 +1,47 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
-const CartContext = createContext([])
+const CartContext = createContext({
+  products: [],
+  addToCart: (product) => {},
+  removeFormCart: (product) => {},
+  clearCart: () => {},
+  count: 0,
+})
 
 const useCart = () => {
-  return useContext(CartContext)
+    return useContext(CartContext)
 }
 
-const CartProvider = ({ children }) => {
-  
-  const [cart, setCart] = useState([])
+const CartContextProvider = ( {children} ) => {
 
-  useEffect (() => {
-    console.log('')
-    const cartStorage = localStorage.getItem('cart')
-    if (cartStorage.length > 0) {
-      setCart(JSON.parse(cartStorage))
-    }
-  }, [])
-  
-  const add = (product) => {
-    setCart(cart => cart.concat(product))
-    
+  const [products, setProducts] = useLocalStorage('products', [])
+
+  const addToCart = ( product ) => {
+    setProducts( products => [...products, product] )
+  }
+
+  const removeFormCart = ( product ) => {
+    setProducts( products => products.filter( p => p.id !== product.id ) )
+  }
+
+  const clearCart = () => {
+    setProducts([])
   }
 
   const context = {
-    cart,
-    add: add
+    products: products,
+    addToCart: addToCart,
+    removeFormCart: removeFormCart,
+    clearCart: clearCart,
+    count: products.length
   }
-
+  
   return (
     <CartContext.Provider value={context}>
-      {children}
+        {children}
     </CartContext.Provider>
   )
 }
 
-export { useCart, CartProvider }
+export { useCart, CartContextProvider }
