@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useCart } from '../context/cartContext';
 import PlaceholderLoading from 'react-placeholder-loading'
-import { CgTrash,CgArrowLeft } from "react-icons/cg";
+import { CgTrash, CgArrowLeft } from "react-icons/cg";
 
 const ItemDetails = () => {
 
