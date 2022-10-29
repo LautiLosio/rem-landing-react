@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useCart } from '../context/cartContext';
 import PlaceholderLoading from 'react-placeholder-loading'
 import { CgTrash, CgArrowLeft } from "react-icons/cg";
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 
 const ItemDetails = () => {
 
@@ -18,13 +19,28 @@ const ItemDetails = () => {
   }, [itemId])
 
   const loadDetails = async () => {
-    const response = await fetch(`https://fakestoreapi.com/products/${itemId}`);
-    const data = await response.json();
-    const formatedPrice = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD' }).format(data.price);
-    setProduct(data);
-    setFormatedPrice(formatedPrice);
-    setInCart(products.find(p => p.id === data.id));
-    setLoading(false);
+    const db = getFirestore();
+    const docRef = doc(db, "products", itemId);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap);
+    if (docSnap.exists()) {
+      const data = { id: docSnap.id, ...docSnap.data() };
+      setProduct(data);
+      setFormatedPrice(new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(data.price));
+      setInCart(products.some(product => product.id === data.id));
+      setLoading(false);
+    } else {
+      console.log("No such document!");
+    }
+      
+    
+
+    // const formatedPrice = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(data.price);
+
+    // setProduct(data);
+    // setFormatedPrice(formatedPrice);
+    // setInCart(products.find(p => p.id === data.id));
+    // setLoading(false);
   }
 
   const addHandler = () => {
@@ -41,7 +57,7 @@ const ItemDetails = () => {
     if (inCart) {
       return (
         <div className='flex gap-4  md:justify-start md:grow-0'>
-          <button className="btn btn-primary grow md:grow-0" disabled>En el carrito</button>
+          <Link to='/cart' className='btn btn-primary grow md:grow-0'>Ir al carrito</Link>
           <button className="btn btn-error" onClick={removeHandler}>
             <CgTrash size={24} />
           </button>
@@ -56,9 +72,10 @@ const ItemDetails = () => {
   return (
     <div>
       {loading ? (
-        <div className='flex flex-col items-center md:items-start p-12 md:flex-row md:p-24 gap-8'>
-          <figure className='flex justify-center md:w-1/2 max-h-96'>
-            <PlaceholderLoading shape='rect' width='300' height='300'/>
+        <div className='flex flex-col items-center p-12 md:flex-row gap-8 md:h-screen justify-around'>
+          <Link to='/' className='hidden btn self-start md:flex'><CgArrowLeft size={24}/></Link>
+          <figure className='flex justify-center md:w-1/2'>
+            <PlaceholderLoading shape='rect' width='300' height='350'/>
           </figure>
           <div className='flex flex-col md:w-1/2 gap-4 '>
             <PlaceholderLoading shape='rect' width='300' height='40' />
@@ -74,8 +91,8 @@ const ItemDetails = () => {
       ) : (
         <div className='flex flex-col items-center p-12 md:flex-row gap-8 md:h-screen justify-around'>
           <Link to='/' className='hidden btn self-start md:flex'><CgArrowLeft size={24}/></Link>
-          <figure className='flex justify-center md:w-1/3'>
-            <img src={product.image} alt={product.title} className="max-h-[500px]" />
+          <figure className='flex justify-center md:w-1/2'>
+            <img src={product.image} alt={product.title} className="max-h-[500px] rounded-xl" />
           </figure>
           <div className='flex flex-col md:w-1/2 gap-4'>
             <h1 className='text-3xl font-bold drop-shadow-sm'>{product.title}</h1>
@@ -84,6 +101,14 @@ const ItemDetails = () => {
               <div className='badge badge-outline capitalize'>{product.category}</div>
             </div>
             <div className='text-lg'>{product.description}</div>
+            <div className=''>
+              <p className='text-lg underline'>Medidas:</p>
+              <ul className='text-sm'>
+                <li className='ml-2'>Largo: {product.sizes[0]} cm</li>
+                <li className='ml-2'>Ancho: {product.sizes[1]} cm</li>
+                <li className='ml-2'>Profundidad: {product.sizes[2]} cm</li>
+              </ul>
+            </div>
             {showButton()}
           </div>
         </div>

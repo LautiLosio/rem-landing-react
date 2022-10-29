@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/cartContext'
 import CartItem from './CartItem'
+import { addDoc, collection, doc, getFirestore } from 'firebase/firestore'
+import { CgClose } from 'react-icons/cg';
+import { toast } from 'react-toastify';
+
 
 const Cart = () => {
 
@@ -27,6 +31,67 @@ const Cart = () => {
     let formatedTot = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(tot);
     setTotal(formatedTot);
   }, [products])
+
+  const placeOrder = (e) => {
+    e.preventDefault();
+    const target = e.target;
+    target.submit.disabled = true;
+    
+
+    // get buyer info
+    const buyer = {
+      name: target.name.value,
+      phone: target.phone.value,
+      email: target.email.value
+    }
+
+    // get products
+    const items = products.map(p => {
+      return {
+        id: p.id,
+        title: p.title,
+        price: p.price,
+        quantity: 1
+      }
+    })
+
+    // create order
+    const order = {
+      buyer,
+      items,
+      date: new Date(),
+      total
+    }
+    console.log(order);
+
+    // send order to firebase
+    const db = getFirestore();
+    const ordersCollection = collection(db, 'orders');
+    addDoc(ordersCollection, order).then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
+      notify(docRef.id);
+    })
+
+    // clear cart after 6 seconds
+    new Promise((resolve) => { setTimeout(() => resolve(), 6000) })
+      .then(() => {
+        clearCart(); 
+      })
+  }
+
+  const notify = (id) => toast.success(
+    `Orden realizada con éxito!\n 
+    Id de orden: ${id}\n`, {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  })
+
+
 
   return (
     <div className='flex flex-col w-full gap-4'>
@@ -62,11 +127,21 @@ const Cart = () => {
                 <input type="checkbox" id="my-modal-1" className="modal-toggle" />
                 <label htmlFor="my-modal-1" className="modal modal-bottom sm:modal-middle cursor-pointer">
                   <label className="modal-box relative">
-                    <h3 className="font-bold text-lg">¡Compraste tus productos!</h3>
-                    <p className="py-4">Si esta pagina estuviera andando de verdad seguramente te pediria los datos de tu tarjeta. Pero esta vez te salvaste...</p>
-                    <div className="modal-action">
-                      <label htmlFor="my-modal-1" className="btn btn-outline">Cerrar</label>
+                    <div className="modal-header flex justify-between items-center">
+                      <h1 className="text-2xl font-bold">Confirmar compra</h1>
+                      <label htmlFor="my-modal-1" className="modal-close cursor-pointer"><CgClose size={24}/></label>
                     </div>
+                    <h3 className="text-lg py-4">Estas por realizar una orden de compra</h3>
+                    <p className="">Por favor completa tus datos y confirma la orden de compra</p>
+                    <form className='form-control gap-4 py-4' onSubmit={placeOrder}>
+                      <input placeholder='Nombre' type="text" name="name" className='input outline outline-2 outline-base-200' required />
+                      <input placeholder='Telefono' type="text" name="phone" className='input outline outline-2 outline-base-200' required />
+                      <input placeholder='Email' type="email" name="email" className='input outline outline-2 outline-base-200' required />
+                      <input name='submit' className='btn btn-ghost btn-outline self-end' type="submit" value="Confirmar"/>
+                    </form>
+                    {/* <div className="modal-action">
+                      <label htmlFor="my-modal-1" className="btn btn-outline" onClick={placeOrder}>Confimar</label>
+                    </div> */}
                   </label>
                 </label>
 
