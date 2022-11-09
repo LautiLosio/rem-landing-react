@@ -15,33 +15,34 @@ const ItemDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadDetails();
-  }, [itemId])
-
-  const loadDetails = async () => {
-    const db = getFirestore();
-    const docRef = doc(db, "products", itemId);
-    const docSnap = await getDoc(docRef);
-    console.log(docSnap);
-    if (docSnap.exists()) {
-      const data = { id: docSnap.id, ...docSnap.data() };
-      setProduct(data);
-      setFormatedPrice(new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(data.price));
-      setInCart(products.some(product => product.id === data.id));
-      setLoading(false);
-    } else {
-      console.log("No such document!");
-    }
+    const loadDetails = async () => {
+      const db = getFirestore();
+      const docRef = doc(db, "products", itemId);
+      const docSnap = await getDoc(docRef);
+      console.log(docSnap);
+      if (docSnap.exists()) {
+        const data = { id: docSnap.id, ...docSnap.data() };
+        setProduct(data);
+        setFormatedPrice(new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(data.price));
+        setInCart(products.some(product => product.id === data.id));
+        setLoading(false);
+      } else {
+        console.log("No such document!");
+      }
+        
       
-    
+  
+      // const formatedPrice = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(data.price);
+  
+      // setProduct(data);
+      // setFormatedPrice(formatedPrice);
+      // setInCart(products.find(p => p.id === data.id));
+      // setLoading(false);
+    }
 
-    // const formatedPrice = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(data.price);
+    loadDetails();
+  }, [itemId, products])
 
-    // setProduct(data);
-    // setFormatedPrice(formatedPrice);
-    // setInCart(products.find(p => p.id === data.id));
-    // setLoading(false);
-  }
 
   const addHandler = () => {
     addToCart(product)
