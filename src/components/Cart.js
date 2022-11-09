@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/cartContext'
 import CartItem from './CartItem'
-import { addDoc, collection, doc, getFirestore } from 'firebase/firestore'
+import { addDoc, collection, getFirestore } from 'firebase/firestore'
 import { CgClose } from 'react-icons/cg';
 import { toast } from 'react-toastify';
 

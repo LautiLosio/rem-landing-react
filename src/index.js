@@ -8,12 +8,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD8nPFLRxWzUGTHq3dnTuzrLWxuqn5Jqog",
-  authDomain: "rem-landing-page.firebaseapp.com",
-  projectId: "rem-landing-page",
-  storageBucket: "rem-landing-page.appspot.com",
-  messagingSenderId: "117524622142",
-  appId: "1:117524622142:web:98870bcfd1dc6ef83d1a6f"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
