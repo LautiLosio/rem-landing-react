@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ItemCard } from "./ItemCard";
 import PlaceholderLoading from 'react-placeholder-loading'
-import { addDoc, collection, getDocs, getFirestore } from 'firebase/firestore';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
 
 const ItemListContainer = () => {
 
@@ -10,45 +10,47 @@ const ItemListContainer = () => {
   const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("Mis Productos");
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     setTitle("Cargando productos...");
+
+    const loadProducts = async () => {
+      setLoading(true);
+      const productsList = await getFirebaseProducts();
+      setProducts(productsList);
+      setTitle("Mis Productos");
+      setLoading(false);
+      
+      // const response = await fetch('https://fakestoreapi.com/products')
+      // const data = await response.json();
+      // setProducts(data);
+      // setTitle("Mis Productos");
+      // setLoading(false);
+      
+    }
+    
+    const loadProductsByCategory = async () => {
+      setLoading(true);
+      const productsList = await getFirebaseProducts();
+      const filteredProducts = productsList.filter(product => product.category === categoryId);
+      setProducts(filteredProducts);
+      setTitle(categoryId);
+      setLoading(false);
+      
+      
+      // const categoriesResponse = await fetch('https://fakestoreapi.com/products/categories')
+      // const categoryArr = await categoriesResponse.json();
+      // const response = await fetch(`https://fakestoreapi.com/products/category/${categoryArr[categoryId]}`)
+      // const data = await response.json();
+      // setProducts(data);
+      // setTitle(categoryArr[categoryId]);
+      // setLoading(false);
+    }
+
     categoryId ? loadProductsByCategory() : loadProducts();
+
   }, [categoryId])
-
-  const loadProducts = async () => {
-    setLoading(true);
-    const productsList = await getFirebaseProducts();
-    setProducts(productsList);
-    setTitle("Mis Productos");
-    setLoading(false);
-
-    // const response = await fetch('https://fakestoreapi.com/products')
-    // const data = await response.json();
-    // setProducts(data);
-    // setTitle("Mis Productos");
-    // setLoading(false);
-
-  }
-
-  const loadProductsByCategory = async () => {
-    setLoading(true);
-    const productsList = await getFirebaseProducts();
-    const filteredProducts = productsList.filter(product => product.category === categoryId);
-    setProducts(filteredProducts);
-    setTitle(categoryId);
-    setLoading(false);
-
-
-    // const categoriesResponse = await fetch('https://fakestoreapi.com/products/categories')
-    // const categoryArr = await categoriesResponse.json();
-    // const response = await fetch(`https://fakestoreapi.com/products/category/${categoryArr[categoryId]}`)
-    // const data = await response.json();
-    // setProducts(data);
-    // setTitle(categoryArr[categoryId]);
-    // setLoading(false);
-  }
-
+  
   const getFirebaseProducts = async ( ) => { 
     const db = getFirestore();
     const productsCollection = collection(db, "products");
