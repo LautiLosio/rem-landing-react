@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import ItemDetails from './components/ItemDetails';
 import { CartContextProvider } from './context/cartContext';
 import Cart from './components/Cart';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
           <Route path="/" element={<ItemListContainer />} />
           <Route path="/category/:categoryId" element={<ItemListContainer />} />
           <Route path="/item/:itemId" element={<ItemDetails />} />
-          <Route path='/cart' element={<Cart/>} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>

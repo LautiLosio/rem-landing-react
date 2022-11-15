@@ -55,9 +55,7 @@ const ItemListContainer = () => {
     const db = getFirestore();
     const productsCollection = collection(db, "products");
     const productsSnapshot = await getDocs(productsCollection);
-    console.log(productsSnapshot);
     const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    console.log(productsList);
     return productsList;
    }
 

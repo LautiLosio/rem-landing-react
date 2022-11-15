@@ -62,7 +62,6 @@ const Cart = () => {
       date: new Date(),
       total
     }
-    console.log(order);
 
     // send order to firebase
     const db = getFirestore();
@@ -85,9 +84,9 @@ const Cart = () => {
     position: "top-center",
     autoClose: 5000,
     hideProgressBar: false,
-    closeOnClick: true,
+    closeOnClick: false,
     pauseOnHover: true,
-    draggable: true,
+    draggable: false,
     progress: undefined,
   })
 

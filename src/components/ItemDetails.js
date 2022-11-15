@@ -4,6 +4,7 @@ import { useCart } from '../context/cartContext';
 import PlaceholderLoading from 'react-placeholder-loading'
 import { CgTrash, CgArrowLeft } from "react-icons/cg";
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 const ItemDetails = () => {
 
@@ -27,21 +28,31 @@ const ItemDetails = () => {
         setInCart(products.some(product => product.id === data.id));
         setLoading(false);
       } else {
-        console.log("No such document!");
-      }
+        toast.error("No se encontró el producto", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        });
         
-      
-  
-      // const formatedPrice = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(data.price);
-  
-      // setProduct(data);
-      // setFormatedPrice(formatedPrice);
-      // setInCart(products.find(p => p.id === data.id));
-      // setLoading(false);
+        // redirect to home 
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 7000);
+        }
+        ).then(() => {
+          window.location.href = "/";
+        });
+      }
     }
 
     loadDetails();
-  }, [itemId, products])
+
+  }, [itemId, products]);
 
 
   const addHandler = () => {
@@ -74,15 +85,15 @@ const ItemDetails = () => {
     <div>
       {loading ? (
         <div className='flex flex-col items-center p-12 md:flex-row gap-8 md:h-screen justify-around'>
-          <Link to='/' className='hidden btn self-start md:flex'><CgArrowLeft size={24}/></Link>
+          <Link to='/' className='hidden btn self-start md:flex'><CgArrowLeft size={24} /></Link>
           <figure className='flex justify-center md:w-1/2'>
-            <PlaceholderLoading shape='rect' width='300' height='350'/>
+            <PlaceholderLoading shape='rect' width='300' height='350' />
           </figure>
           <div className='flex flex-col md:w-1/2 gap-4 '>
             <PlaceholderLoading shape='rect' width='300' height='40' />
             <div className='flex flex-row gap-4 items-center'>
               <PlaceholderLoading shape='rect' width='100' height='30' />
-              <PlaceholderLoading shape='rect' width='96' height='24'/>
+              <PlaceholderLoading shape='rect' width='96' height='24' />
             </div>
             <PlaceholderLoading shape='rect' width='300' height='20' />
             <PlaceholderLoading shape='rect' width='300' height='20' />
@@ -90,10 +101,10 @@ const ItemDetails = () => {
           </div>
         </div>
       ) : (
-        <div className='flex flex-col items-center p-12 md:flex-row gap-8 md:h-screen justify-around'>
-          <Link to='/' className='hidden btn self-start md:flex'><CgArrowLeft size={24}/></Link>
+        <div className='flex flex-col items-center p-12 lg:flex-row gap-8 lg:h-screen justify-around'>
+          <Link to='/' className='hidden btn self-start md:flex'><CgArrowLeft size={24} /></Link>
           <figure className='flex justify-center md:w-1/2'>
-            <img src={product.image} alt={product.title} className="max-h-[500px] rounded-xl" />
+            <img src={product.image} alt={product.title} className="max-h-[500px] 2xl:max-h-[700px] rounded-xl" />
           </figure>
           <div className='flex flex-col md:w-1/2 gap-4'>
             <h1 className='text-3xl font-bold drop-shadow-sm'>{product.title}</h1>
