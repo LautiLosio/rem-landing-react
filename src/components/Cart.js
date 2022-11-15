@@ -132,7 +132,7 @@ const Cart = () => {
                     </div>
                     <h3 className="text-lg py-4">Estas por realizar una orden de compra</h3>
                     <p className="">Por favor completa tus datos y confirma la orden de compra</p>
-                    <form className='form-control gap-4 py-4' onSubmit={placeOrder} data-netlify="true">
+                    <form className='form-control gap-4 py-4' onSubmit={placeOrder} netlify>
                       <input placeholder='Nombre' type="text" name="name" className='input outline outline-2 outline-base-200' required />
                       <input placeholder='Telefono' type="text" name="phone" className='input outline outline-2 outline-base-200' required />
                       <input placeholder='Email' type="email" name="email" className='input outline outline-2 outline-base-200' required />
